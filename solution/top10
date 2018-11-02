@@ -1,7 +1,13 @@
-#! /bin/bash
+#!/bin/bash
 
-# run this script as "top10 log.txt"
+total=0
+while read int;do
+#for i in grep '"-"' log.txt | cut -d' ' -f1 | sort | uniq -c | sort -n | tail | tac | tr -s ' ' | cut -d' ' -f2; do
+total=$((total + $int))
+done< <(grep '"-"' log.txt | cut -d' ' -f1 | sort | uniq -c | sort -n | tail | tac | tr -s ' ' | cut -d' ' -f2)
 
-# here comes your solution
-# e.g.
-grep world $1
+i=1
+while read num host; do
+printf "$i. $host - $num - $(echo "scale=1; $num * 100 / $total" | bc)%%\n"
+i=$((i + 1))
+done < <(grep '"-"' log.txt | cut -d' ' -f1 | sort | uniq -c | sort -n | tail | tac | tr -s ' ' | cut -d' ' -f2,3)
